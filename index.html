@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Delihealths – Cómo acceder a la app</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:       #4ab3e8;
+      --blue-dark:  #2a93c8;
+      --blue-light: #eaf6fd;
+      --text:       #1a2733;
+      --muted:      #5f7080;
+      --border:     #cce5f5;
+      --white:      #ffffff;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #f2f8fc;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: linear-gradient(135deg, #1565a8 0%, #4ab3e8 100%);
+      color: var(--white);
+      text-align: center;
+      padding: 40px 24px 36px;
+    }
+
+    .logo-wrap {
+      width: 90px; height: 90px;
+      background: var(--white);
+      border-radius: 22px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,.15);
+      overflow: hidden;
+    }
+    .logo-wrap img { width: 80px; height: 80px; object-fit: contain; }
+
+    header h1 { font-size: clamp(1.6rem,4vw,2.3rem); font-weight: 800; }
+    header p  { margin-top: 8px; font-size: .97rem; opacity: .9; max-width: 480px; margin-inline: auto; }
+
+    /* ── STORE BADGES ── */
+    .store-section {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 22px 20px;
+      text-align: center;
+    }
+    .store-section p { font-size: .88rem; color: var(--muted); margin-bottom: 14px; }
+    .badges { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .badge {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--text); color: var(--white);
+      padding: 11px 20px; border-radius: 12px;
+      text-decoration: none; font-size: .85rem;
+      transition: background .2s, transform .15s;
+    }
+    .badge:hover { background: var(--blue-dark); transform: translateY(-2px); }
+    .badge-icon  { font-size: 1.7rem; line-height: 1; }
+    .badge-text small  { display:block; font-size:.65rem; opacity:.75; text-transform:uppercase; letter-spacing:.5px; }
+    .badge-text strong { display:block; font-size:.95rem; }
+
+    .badge-img-link {
+      display: inline-block;
+      transition: transform .2s, opacity .2s;
+    }
+    .badge-img-link:hover { transform: translateY(-3px); opacity: .88; }
+    .badge-sprite {
+      display: inline-block;
+      width: 155px;
+      height: 52px;
+      background-image: url('logos png.png');
+      background-size: 200% auto;
+      background-repeat: no-repeat;
+      border-radius: 10px;
+      transition: transform .2s, opacity .2s;
+    }
+    .badge-sprite:hover { transform: translateY(-3px); opacity: .85; }
+    .badge-sprite.playstore { background-position: left center; }
+    .badge-sprite.appstore  { background-position: right center; }
+
+    /* ── MAIN ── */
+    main { max-width: 860px; margin: 0 auto; padding: 36px 16px 60px; }
+
+    /* ── SECTION LABEL ── */
+    .section-label {
+      text-align: center;
+      font-size: .8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--blue-dark);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: clamp(1.15rem, 3vw, 1.5rem);
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .section-sub {
+      text-align: center;
+      font-size: .9rem;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    /* ── MOSAIC GRID ── */
+    .mosaic {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 14px;
+      margin-bottom: 6px;
+    }
+
+    .tile {
+      background: var(--white);
+      border: 2px solid var(--border);
+      border-radius: 18px;
+      padding: 22px 14px 18px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .2s, box-shadow .2s, transform .15s, background .2s;
+      position: relative;
+      user-select: none;
+    }
+
+    .tile:hover {
+      border-color: var(--blue);
+      box-shadow: 0 6px 20px rgba(74,179,232,.18);
+      transform: translateY(-3px);
+    }
+
+    .tile.active {
+      border-color: var(--blue-dark);
+      background: var(--blue-light);
+      box-shadow: 0 6px 24px rgba(74,179,232,.25);
+    }
+
+    .tile-icon {
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .tile-num {
+      position: absolute;
+      top: 10px; left: 12px;
+      font-size: .7rem;
+      font-weight: 800;
+      color: var(--blue);
+      background: var(--blue-light);
+      border-radius: 6px;
+      padding: 2px 7px;
+      line-height: 1.4;
+    }
+
+    .tile.active .tile-num { background: var(--blue-dark); color: var(--white); }
+
+    .tile h3 {
+      font-size: .82rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .tile.active h3 { color: var(--blue-dark); }
+
+    /* Arrow indicator */
+    .tile::after {
+      content: '';
+      display: none;
+      position: absolute;
+      bottom: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-left: 12px solid transparent;
+      border-right: 12px solid transparent;
+      border-top: 12px solid var(--blue-dark);
+      z-index: 2;
+    }
+    .tile.active::after { display: block; }
+
+    /* ── DETAIL PANEL ── */
+    .detail-panel {
+      display: none;
+      background: var(--white);
+      border: 2px solid var(--blue-dark);
+      border-radius: 18px;
+      padding: 28px 28px 24px;
+      margin-top: 18px;
+      animation: slideDown .25s ease;
+      position: relative;
+    }
+
+    .detail-panel.visible { display: block; }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .detail-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .detail-icon { font-size: 2.4rem; line-height: 1; }
+
+    .detail-header h2 {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .detail-header .step-badge {
+      font-size: .72rem;
+      font-weight: 700;
+      background: var(--blue-dark);
+      color: var(--white);
+      padding: 3px 9px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .detail-body { font-size: .93rem; color: var(--muted); line-height: 1.7; }
+    .detail-body p { margin-bottom: 10px; }
+    .detail-body strong { color: var(--text); }
+
+    /* Close btn */
+    .close-btn {
+      position: absolute;
+      top: 14px; right: 16px;
+      background: var(--blue-light);
+      border: none;
+      border-radius: 50%;
+      width: 30px; height: 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      color: var(--blue-dark);
+      line-height: 1;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+    }
+    .close-btn:hover { background: var(--border); }
+
+    /* ── MOCK SCREEN ── */
+    .mock-screen {
+      background: #f4f9fe;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin: 12px 0;
+      font-size: .85rem;
+    }
+    .mock-label { color: var(--muted); font-size: .73rem; margin-bottom: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
+    .mock-field { display: flex; gap: 8px; margin-bottom: 8px; }
+    .mock-prefix {
+      background: #daedf8; border: 1px solid var(--border);
+      border-radius: 8px; padding: 7px 10px;
+      font-size: .83rem; font-weight: 700; color: var(--text); white-space: nowrap;
+    }
+    .mock-input {
+      flex: 1; background: var(--white); border: 1px solid var(--border);
+      border-radius: 8px; padding: 7px 12px; font-size: .85rem; color: var(--muted);
+    }
+    .mock-btn {
+      width: 100%; background: var(--blue); color: var(--white);
+      border-radius: 8px; padding: 9px; text-align: center;
+      font-weight: 700; font-size: .88rem; margin-top: 4px;
+    }
+
+    /* ID table */
+    .id-table { width: 100%; border-collapse: collapse; font-size: .85rem; margin: 10px 0; }
+    .id-table th { background: var(--blue-light); color: var(--blue-dark); padding: 7px 10px; text-align: left; font-size: .78rem; text-transform: uppercase; letter-spacing: .4px; }
+    .id-table td { padding: 8px 10px; border-top: 1px solid var(--border); }
+    .id-table tr:nth-child(even) td { background: #fafcfe; }
+    .id-result {
+      background: var(--blue-light); border-radius: 8px;
+      padding: 10px 14px; font-size: .9rem; margin-top: 8px;
+    }
+
+    /* SMS bubble */
+    .sms-bubble {
+      background: #eaf6fd; border: 1px solid #b8dff5;
+      border-radius: 14px; padding: 14px 18px; margin: 12px 0;
+    }
+    .sms-sender { font-size: .75rem; color: var(--blue-dark); font-weight: 700; margin-bottom: 5px; }
+    .sms-text   { font-size: .87rem; color: var(--muted); margin-bottom: 8px; }
+    .sms-code   { font-size: 1.6rem; font-weight: 800; color: var(--blue-dark); letter-spacing: 6px; }
+
+    /* Note box */
+    .note-box {
+      border-radius: 10px; padding: 11px 14px;
+      font-size: .86rem; margin-top: 10px;
+      display: flex; gap: 8px; align-items: flex-start;
+    }
+    .note-box.blue   { background: var(--blue-light); border: 1px solid var(--border); color: var(--muted); }
+    .note-box.yellow { background: #fff8e6; border: 1px solid #f0d080; border-left: 4px solid #f0b429; color: #6b5000; }
+    .note-box.red    { background: #fff2f2; border: 1px solid #f5c0c0; border-left: 4px solid #e05555; color: #6b1010; }
+
+    /* Trouble list */
+    .trouble-list { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+    .trouble-item {
+      display: flex; gap: 12px; align-items: flex-start;
+      background: #f4f9fe; border: 1px solid var(--border);
+      border-radius: 10px; padding: 12px 14px;
+    }
+    .trouble-item .t-icon { font-size: 1.3rem; min-width: 24px; }
+    .trouble-item strong  { color: var(--text); display: block; margin-bottom: 3px; font-size: .9rem; }
+    .trouble-item span    { font-size: .85rem; color: var(--muted); }
+    .trouble-steps { margin-top: 8px; padding-left: 18px; font-size: .84rem; color: var(--muted); line-height: 1.9; }
+
+    /* chip */
+    .chip {
+      display: inline-block; margin-top: 8px;
+      background: var(--blue-light); color: var(--blue-dark);
+      font-size: .8rem; padding: 3px 10px; border-radius: 20px; font-weight: 600;
+    }
+
+    /* ── FAQ SECTION ── */
+    .faq-wrap { margin-top: 44px; }
+    .faq-item { background: var(--white); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 10px; overflow: hidden; }
+    .faq-q {
+      width: 100%; text-align: left; background: none; border: none;
+      padding: 16px 20px; font-size: .94rem; font-weight: 600; color: var(--text);
+      cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    }
+    .faq-q:hover { background: var(--blue-light); }
+    .faq-icon { color: var(--blue); font-size: 1.3rem; transition: transform .25s; min-width: 20px; text-align: center; }
+    .faq-a { display: none; padding: 14px 20px 18px; font-size: .9rem; color: var(--muted); border-top: 1px solid var(--border); }
+    .faq-item.open .faq-a    { display: block; }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+
+    /* ── CONTACT ── */
+    .contact-banner {
+      margin-top: 40px;
+      background: linear-gradient(135deg, #1565a8, #4ab3e8);
+      color: var(--white); border-radius: 20px; padding: 30px 28px; text-align: center;
+    }
+    .contact-banner h3 { font-size: 1.15rem; margin-bottom: 8px; }
+    .contact-banner p  { font-size: .92rem; opacity: .9; margin-bottom: 18px; }
+    .contact-btn {
+      display: inline-block; background: var(--white); color: var(--blue-dark);
+      font-weight: 700; padding: 11px 26px; border-radius: 12px;
+      text-decoration: none; font-size: .92rem; transition: opacity .2s;
+    }
+    .contact-btn:hover { opacity: .88; }
+
+    footer { text-align: center; padding: 26px; font-size: .82rem; color: var(--muted); border-top: 1px solid var(--border); margin-top: 20px; }
+
+    @media (max-width: 480px) {
+      .mosaic { grid-template-columns: repeat(2, 1fr); }
+      .detail-panel { padding: 20px 16px; }
+      .badges { flex-direction: column; align-items: center; }
+      .badge  { width: 100%; max-width: 260px; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo-wrap">
+    <img src="LOGO CLARO.png" alt="Delihealths"
+         onerror="this.style.display='none'; this.parentElement.innerHTML='🩺';" />
+  </div>
+  <h1>Delihealths®</h1>
+  <p>Grupo Médico Delihealths® · Guía para acceder a la app</p>
+</header>
+
+<!-- DESCARGA -->
+<div class="store-section">
+  <p>Descarga la app gratuita — disponible para iPhone y Android</p>
+  <div class="badges">
+    <a href="https://apps.apple.com/us/app/delihealths/id6474232131" target="_blank" rel="noopener" class="badge-sprite appstore" aria-label="Descargar en el App Store"></a>
+    <a href="https://play.google.com/store/apps/details?id=com.delihealths.newchatmedico" target="_blank" rel="noopener" class="badge-sprite playstore" aria-label="Disponible en Google Play"></a>
+  </div>
+</div>
+
+<main>
+
+  <!-- MOSAIC -->
+  <div class="section-label">Selecciona el paso donde necesitas ayuda</div>
+  <div class="section-title">¿En cuál paso estás?</div>
+  <div class="section-sub">Toca la tarjeta del paso donde tienes duda y se mostrarán las instrucciones</div>
+
+  <div class="mosaic" id="mosaic">
+
+    <div class="tile" data-step="step1" onclick="openStep('step1', this)">
+      <span class="tile-num">Paso 1</span>
+      <span class="tile-icon">📲</span>
+      <h3>Abrir la app</h3>
+    </div>
+
+    <div class="tile" data-step="step2" onclick="openStep('step2', this)">
+      <span class="tile-num">Paso 2</span>
+      <span class="tile-icon">🔑</span>
+      <h3>Accede con tus datos</h3>
+    </div>
+
+    <div class="tile" data-step="step3" onclick="openStep('step3', this)">
+      <span class="tile-num">Paso 3</span>
+      <span class="tile-icon">📱</span>
+      <h3>Número de teléfono</h3>
+    </div>
+
+    <div class="tile" data-step="step4" onclick="openStep('step4', this)">
+      <span class="tile-num">Paso 4</span>
+      <span class="tile-icon">🪪</span>
+      <h3>Mi identificador</h3>
+    </div>
+
+    <div class="tile" data-step="step5" onclick="openStep('step5', this)">
+      <span class="tile-num">Paso 5</span>
+      <span class="tile-icon">📋</span>
+      <h3>Términos y condiciones</h3>
+    </div>
+
+    <div class="tile" data-step="step6" onclick="openStep('step6', this)">
+      <span class="tile-num">Paso 6</span>
+      <span class="tile-icon">💬</span>
+      <h3>Código por SMS</h3>
+    </div>
+
+    <div class="tile" data-step="step7" onclick="openStep('step7', this)">
+      <span class="tile-num">Paso 7</span>
+      <span class="tile-icon">✅</span>
+      <h3>Ingresar el código</h3>
+    </div>
+
+    <div class="tile" data-step="step8" onclick="openStep('step8', this)" style="border-color:#f0d080; background:#fffdf0;">
+      <span class="tile-num" style="background:#fff3cd; color:#a07800;">⚠ Ayuda</span>
+      <span class="tile-icon">🆘</span>
+      <h3>No me llega el código</h3>
+    </div>
+
+  </div>
+
+  <!-- DETAIL PANEL -->
+  <div class="detail-panel" id="detailPanel">
+    <button class="close-btn" onclick="closeStep()" title="Cerrar">✕</button>
+    <div id="detailContent"></div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq-wrap">
+    <div class="section-title" style="text-align:left; font-size:1.1rem; margin-bottom:16px;">Preguntas frecuentes</div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        ¿Dónde encuentro mi identificador de paciente?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">
+        Tu identificador se forma con: <strong>inicial del primer nombre</strong> + <strong>inicial del primer apellido</strong> + <strong>inicial del segundo apellido</strong> + <strong>número de empleado con todos los ceros</strong>.<br><br>
+        Ejemplo: Nombre Apellido1 Apellido2 con número 00000000 → <strong>NAA00000000</strong><br><br>
+        Puedes consultar tu número de empleado en la <strong>parte posterior de tu credencial de empleado</strong>.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        ¿Por qué me pide un código SMS cada vez que entro?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">
+        La <strong>App Delihealths</strong> usa verificación por SMS como medida de seguridad para proteger tu información de salud. Cada código es de un solo uso y expira en pocos minutos.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        ¿Delihealths está disponible en computadora o versión web?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">
+        No. La <strong>App Delihealths es un servicio exclusivo de dispositivos móviles</strong>. Solo puedes acceder desde tu teléfono celular descargando la App Delihealths en App Store (iPhone) o Google Play (Android).
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Puse el código SMS pero dice que es incorrecto
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">
+        Asegúrate de estar ingresando el código del <strong>último SMS recibido</strong> (los códigos anteriores expiran). Escribe los 6 dígitos sin espacios. Si el problema persiste, toca <strong>"Reenviar código"</strong> para recibir uno nuevo.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        ¿Mi información de salud está segura?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">
+        Sí. La <strong>App Delihealths</strong> protege tu información con cifrado de datos y verificación en dos pasos (SMS). Tu información personal y médica es confidencial y nunca se comparte con terceros sin tu autorización.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CONTACTO -->
+  <div class="contact-banner">
+    <h3>¿Necesitas ayuda adicional?</h3>
+    <p>Nuestro equipo de soporte está disponible para ayudarte con cualquier duda sobre la aplicación.</p>
+    <a href="mailto:soporte@delihealths.com.mx" class="contact-btn">Contactar soporte</a>
+  </div>
+
+</main>
+
+<footer>© 2026 Delihealths® · Disponible en App Store y Google Play</footer>
+
+<!-- STEP CONTENT DATA -->
+<script>
+const steps = {
+  step1: {
+    icon: '📲',
+    title: 'Abrir la app',
+    badge: 'Paso 1',
+    content: `
+      <div class="detail-body">
+        <p>Busca el ícono de la <strong>App Delihealths</strong> en tu teléfono y tócalo para abrirla.</p>
+        <p>Verás la pantalla de bienvenida con el mensaje:<br>
+        <strong>"Te damos la bienvenida a Delihealths"</strong></p>
+        <div class="note-box blue">
+          <span>ℹ️</span>
+          <span>Si aún no tienes la <strong>App Delihealths</strong> instalada, descárgala desde el <strong>App Store</strong> (iPhone) o <strong>Google Play</strong> (Android). La descarga es gratuita.</span>
+        </div>
+      </div>`
+  },
+  step2: {
+    icon: '🔑',
+    title: 'Accede con tus datos',
+    badge: 'Paso 2',
+    content: `
+      <div class="detail-body">
+        <p>En la pantalla de bienvenida, toca el botón:</p>
+        <div style="background:var(--blue); color:white; text-align:center; border-radius:10px; padding:12px; font-weight:700; font-size:1rem; margin:12px 0;">
+          Accede con tus datos
+        </div>
+        <p>Esto te llevará al formulario donde ingresarás tu número de teléfono y tu identificador.</p>
+      </div>`
+  },
+  step3: {
+    icon: '📱',
+    title: 'Número de teléfono',
+    badge: 'Paso 3',
+    content: `
+      <div class="detail-body">
+        <p>Verifica que la lada esté configurada como <strong>+52</strong> (México). Si no lo está, tócala y selecciona México.</p>
+        <p>Luego escribe tu número celular de <strong>10 dígitos</strong>.</p>
+        <div class="mock-screen">
+          <div class="mock-label">Así se ve en la app</div>
+          <div class="mock-field">
+            <div class="mock-prefix">+52 ▾</div>
+            <div class="mock-input">Tu número de 10 dígitos</div>
+          </div>
+        </div>
+        <div class="note-box yellow">
+          <span>⚠️</span>
+          <span>Verifica siempre que la lada sea <strong>+52</strong>. Si el código de país es incorrecto, el SMS no llegará a tu teléfono.</span>
+        </div>
+      </div>`
+  },
+  step4: {
+    icon: '🪪',
+    title: 'Mi identificador',
+    badge: 'Paso 4',
+    content: `
+      <div class="detail-body">
+        <p>Tu identificador se forma uniendo las siguientes partes <strong>sin espacios y en mayúsculas</strong>:</p>
+        <table class="id-table">
+          <tr><th>Parte</th><th>Qué es</th><th>Ejemplo</th></tr>
+          <tr><td><strong>Inicial 1</strong></td><td>1ª letra de tu <strong>primer nombre</strong></td><td><strong style="color:var(--blue-dark);">N</strong> (Nombre)</td></tr>
+          <tr><td><strong>Inicial 2</strong></td><td>1ª letra de tu <strong>primer apellido</strong></td><td><strong style="color:var(--blue-dark);">A</strong> (Apellido1)</td></tr>
+          <tr><td><strong>Inicial 3</strong></td><td>1ª letra de tu <strong>segundo apellido</strong></td><td><strong style="color:var(--blue-dark);">A</strong> (Apellido2)</td></tr>
+          <tr><td><strong>Número</strong></td><td>Número de empleado (con todos los ceros)</td><td><strong style="color:var(--blue-dark);">00000000</strong></td></tr>
+        </table>
+        <div class="id-result">
+          Resultado del ejemplo: <strong style="color:var(--blue-dark); font-size:1.05rem; letter-spacing:1px;">NAA00000000</strong>
+        </div>
+        <div class="note-box yellow" style="margin-top:12px;">
+          <span>📋</span>
+          <span>Tu número de empleado está en la <strong>parte posterior de tu credencial de empleado</strong>. Inclúyelo con todos los ceros tal como aparece.</span>
+        </div>
+      </div>`
+  },
+  step5: {
+    icon: '📋',
+    title: 'Términos y condiciones',
+    badge: 'Paso 5',
+    content: `
+      <div class="detail-body">
+        <p>La <strong>primera vez</strong> que accedes aparecerá una ventana con los <strong>Términos y Condiciones</strong>.</p>
+        <p>Toca la casilla <strong>✅ "He leído y acepto las Condiciones Generales de Uso y Política de Privacidad"</strong> para activarla.</p>
+        <p>Luego presiona el botón <strong>"Siguiente"</strong>.</p>
+        <div class="note-box blue">
+          <span>ℹ️</span>
+          <span>Esta pantalla solo aparece la primera vez que ingresas. En los accesos futuros no la volverás a ver.</span>
+        </div>
+      </div>`
+  },
+  step6: {
+    icon: '💬',
+    title: 'Código por SMS',
+    badge: 'Paso 6',
+    content: `
+      <div class="detail-body">
+        <p>La <strong>App Delihealths</strong> te enviará automáticamente un mensaje de texto (SMS) al número que registraste.</p>
+        <p>El mensaje llegará del número <strong>59895</strong> y contendrá un <strong>código de 6 dígitos</strong>.</p>
+        <div class="sms-bubble">
+          <div class="sms-sender">59895 · Mensajes</div>
+          <div class="sms-text">Tu código de verificación para acceder a la App Delihealths:</div>
+          <div class="sms-code">838400</div>
+        </div>
+        <span class="chip">⏱ El código llega en menos de 1 minuto</span>
+        <div class="note-box yellow" style="margin-top:12px;">
+          <span>⚠️</span>
+          <span>Si no llega el código, ve al <strong>Paso "No me llega el código"</strong> para ver las soluciones.</span>
+        </div>
+      </div>`
+  },
+  step7: {
+    icon: '✅',
+    title: 'Ingresar el código',
+    badge: 'Paso 7',
+    content: `
+      <div class="detail-body">
+        <p>Regresa a la app. Verás la pantalla <strong>"Introduce el código que has recibido por SMS"</strong>.</p>
+        <p>Escribe los <strong>6 dígitos</strong> del SMS y toca <strong>"Siguiente"</strong>.</p>
+        <div class="mock-screen">
+          <div class="mock-label">Así se ve en la app</div>
+          <div class="mock-field">
+            <div class="mock-input">Ej. 838400</div>
+          </div>
+          <div class="mock-btn">Siguiente</div>
+        </div>
+        <p style="margin-top:12px;">Una vez verificado el código, accederás directamente a tu perfil. <strong>¡Listo!</strong> 🎉</p>
+        <div class="note-box blue">
+          <span>ℹ️</span>
+          <span>Si el código no funciona, asegúrate de ingresar el del <strong>último SMS recibido</strong>. Los códigos anteriores expiran. Si el problema persiste, toca <strong>"Reenviar código"</strong>.</span>
+        </div>
+      </div>`
+  },
+  step8: {
+    icon: '🆘',
+    title: 'No me llega el código SMS',
+    badge: '⚠ Ayuda',
+    content: `
+      <div class="detail-body">
+        <p>Este es el problema más frecuente. Sigue estas soluciones <strong>en orden</strong> hasta que funcione:</p>
+        <div class="trouble-list">
+
+          <div class="trouble-item">
+            <span class="t-icon">📁</span>
+            <div>
+              <strong>1. Revisa la carpeta de spam de tus mensajes</strong>
+              <span>A veces el SMS llega pero tu teléfono lo manda a mensajes no deseados o spam. Abre la app de Mensajes, busca la carpeta de spam y revisa si llegó un mensaje del número <strong>59895</strong>.</span>
+            </div>
+          </div>
+
+          <div class="trouble-item">
+            <span class="t-icon">📶</span>
+            <div>
+              <strong>2. Verifica tu señal de red</strong>
+              <span>Si estás en un lugar con mala recepción (sótano, zona rural, edificio cerrado), el SMS puede tardar o no llegar. <strong>Muévete a un lugar con mejor señal</strong> e intenta de nuevo tocando "Reenviar código".</span>
+            </div>
+          </div>
+
+          <div class="trouble-item">
+            <span class="t-icon">🗑️</span>
+            <div>
+              <strong>3. Borra la caché y los datos de la App Delihealths</strong>
+              <span>Si los pasos anteriores no funcionaron, cierra la app por completo y haz lo siguiente:</span>
+              <ol class="trouble-steps">
+                <li>Ve a <strong>Ajustes</strong> de tu teléfono</li>
+                <li>Busca <strong>Aplicaciones</strong> y selecciona <strong>App Delihealths</strong></li>
+                <li>Toca <strong>Almacenamiento</strong></li>
+                <li>Presiona <strong>"Borrar caché"</strong> y luego <strong>"Borrar datos"</strong></li>
+                <li>Abre la app nuevamente e intenta acceder</li>
+              </ol>
+            </div>
+          </div>
+
+        </div>
+        <div class="note-box red" style="margin-top:4px;">
+          <span>🚨</span>
+          <span>Si ninguna solución funciona, contacta a tu equipo de soporte. Recuerda que la <strong>App Delihealths es exclusiva de dispositivos móviles</strong> y no está disponible en computadora o versión web.</span>
+        </div>
+      </div>`
+  }
+};
+
+function openStep(id, tile) {
+  const allTiles = document.querySelectorAll('.tile');
+  const panel = document.getElementById('detailPanel');
+  const content = document.getElementById('detailContent');
+  const step = steps[id];
+
+  // Si ya está activa la misma, cierra
+  if (tile.classList.contains('active')) {
+    closeStep();
+    return;
+  }
+
+  // Quita active de todas
+  allTiles.forEach(t => t.classList.remove('active'));
+  tile.classList.add('active');
+
+  // Construye contenido
+  content.innerHTML = `
+    <div class="detail-header">
+      <span class="detail-icon">${step.icon}</span>
+      <div>
+        <span class="step-badge">${step.badge}</span>
+        <h2 style="margin-top:4px;">${step.title}</h2>
+      </div>
+    </div>
+    ${step.content}
+  `;
+
+  panel.classList.add('visible');
+
+  // Scroll suave al panel
+  setTimeout(() => {
+    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 50);
+}
+
+function closeStep() {
+  document.querySelectorAll('.tile').forEach(t => t.classList.remove('active'));
+  document.getElementById('detailPanel').classList.remove('visible');
+}
+
+function toggleFaq(btn) {
+  btn.closest('.faq-item').classList.toggle('open');
+}
+</script>
+
+</body>
+</html>
